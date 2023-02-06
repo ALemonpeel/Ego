@@ -5,14 +5,15 @@
       text-color       文字颜色
       active-text-color高亮文字颜色
       router           启动路由模式
+      collapse         是否水平折叠菜单（仅在mode为vertival时可用） boolean -false
     el-submenu  下拉导航内容
        index="1"       导航标识 路由路径
     el-menu-item-group 分组 
     el-menu-item       导航的每一项内容
 
    -->
-  <el-menu default-active="/" router class="el-menu-vertical-demo" :collapse="isCollapse"
-    background-color="#112f50" text-color="#fff" active-text-color="#ffd04b">
+  <el-menu default-active="/" router class="el-menu-vertical-demo" background-color="#112f50"
+   text-color="#fff" active-text-color="#ffd04b" :collapse="isCollapse">
     <el-menu-item index="/">
       <i class="el-icon-menu"></i>
       <span slot="title">系统首页</span>
@@ -38,17 +39,17 @@
         <el-menu-item index="/order/collect">订单审核</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
-    <el-submenu index="4">
+    <el-submenu index="/advert">
       <template slot="title">
         <i class="el-icon-location"></i>
         <span slot="title">广告管理</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="1-1">广告列表</el-menu-item>
-        <el-menu-item index="1-2">分类管理</el-menu-item>
+        <el-menu-item index="/advert/advertlist">广告列表</el-menu-item>
+        <el-menu-item index="1-2" disabled>分类管理</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
-    <el-submenu index="5">
+    <el-submenu index="5" disabled>
       <template slot="title">
         <i class="el-icon-location"></i>
         <span slot="title">系统管理</span>
@@ -63,12 +64,17 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props:['isCollapse']
+};
 </script>
 
 <style lang='less' scoped>
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
+}
+.el-menu{
+  border: none;
 }
 </style>

@@ -1,5 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+//点击跳转同一个路径
+const routerPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function (location) {
+  return routerPush.call(this, location).catch(err => { })
+}
 //导入组件
 import MyLogin from '@/views/MyLogin/MyLogin.vue'
 import MyLayout from '@/views/MyLayout/MyLayout.vue'
@@ -13,6 +18,9 @@ import Order from '@/views/MyLayout/Order'
 import Auditing from '@/views/MyLayout/Order/Auditing'
 import OrderList from '@/views/MyLayout/Order/list'
 import Collect from '@/views/MyLayout/Order/Collect'
+//广告管理
+import Advert from '@/views/MyLayout/Advert'
+import AdvertList from '@/views/MyLayout/Advert/list'
 
 Vue.use(VueRouter)
 
@@ -63,6 +71,18 @@ const routes = [
             name: 'collect',
             component: Collect
           }
+        ]
+      },
+      {
+        path: '/advert',
+        name: 'advert',
+        component: Advert,
+        children: [
+          {
+            path: 'advertlist',
+            name: 'advertlist',
+            component: AdvertList
+          },
         ]
       },
     ]

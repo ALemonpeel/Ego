@@ -8,6 +8,10 @@ import '@/assets/css/iconfont.css'
 //iconfont
 import '@/assets/css/reset.css'
 
+//挂在网络请求的配置方法
+import api from './api'
+Vue.prototype.$api = api
+
 Vue.config.productionTip = false
 
 new Vue({

@@ -3,21 +3,21 @@
     <!--1.  顶部区域布局---------- -->
     <div class="header">
       <div class="item">
-        {{ listTitle[0]}}
-        <div class='num'>{{ list.payTotal | num }}</div>
-        <div class="bottom">今日{{ listTitle[0]}}:{{ list.pay | num }}</div>
+        总销售额
+        <div class='num'>{{ list.viewsTotal }}</div>
+        <div class="bottom">今日销售额:{{ list.views }}</div>
       </div>
-      <div class="item">{{ listTitle[1]}}
-        <div class='num'>{{ list.saleTotal | num }}</div>
-        <div class="bottom">今日{{ listTitle[1]}}：{{ list.sale | num }}</div>
+      <div class="item">访问量
+        <div class='num'>{{ list.saleTotal }}</div>
+        <div class="bottom">今日访问量：{{ list.sale }}</div>
       </div>
-      <div class="item">{{ listTitle[2]}}
-        <div class='num'>{{ list.viewsTotal | num }}</div>
-        <div class="bottom">今日{{ listTitle[2]}}：{{ list.views | num }}</div>
+      <div class="item">销售额
+        <div class='num'>{{ list.payTotal }}</div>
+        <div class="bottom">今日销售额：{{ list.pay }}</div>
       </div>
-      <div class="item">{{ listTitle[3]}}
-        <div class='num'>{{ list.collectTotal | num }}</div>
-        <div class="bottom">今日{{ listTitle[3]}}：{{ list.collect | num }}</div>
+      <div class="item">支付量
+        <div class='num'>{{ list.collectTotal }}</div>
+        <div class="bottom">今日支付量：{{ list.collect }}</div>
       </div>
     </div>
 
@@ -89,26 +89,17 @@
 export default {
   data() {
     return {
-      //储存信息
-      list: {},
-      listTitle: ['销售额', '访问量', '收藏量', '支付量']
+      list: []
     }
 
   },
-  filters: {
-    num(val) {
-      if (!val) return '';
-      return val.toLocaleString();
-    }
-  },
   mounted() {
-    //获取顶部统计信息
-    this.getHomeCount();
+    this.getHomeCount()
   },
   methods: {
     async getHomeCount() {
       let res = await this.$api.getHomeCount().then(res => {
-        this.list = res.data.data.list;
+        this.list = res.data.data.list
       })
     }
   }

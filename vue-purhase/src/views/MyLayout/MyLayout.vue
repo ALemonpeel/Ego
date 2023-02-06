@@ -2,11 +2,11 @@
   <div class="layout">
     <!-- 左侧导航 -->
     <div class="menu">
-      <Menu></Menu>
+      <Menu :isCollapse="isCollapse"></Menu>
     </div>
     <!-- 右侧内容区 -->
-    <div class="content">
-      <Content></Content>
+    <div class="content" :class="{active:isCollapse}">
+      <Content @changeMenu="changeMenu" :isCollapse="isCollapse"></Content>
     </div>
   </div>
 </template>
@@ -20,6 +20,16 @@ export default {
     Menu,
     Content,
   },
+  data(){
+    return{
+      isCollapse:false
+    }
+  },
+  methods:{
+    changeMenu(){
+        this.isCollapse = !this.isCollapse
+      }
+  }
 };
 </script>
 
@@ -30,11 +40,17 @@ export default {
     left: 0;
     top: 0;
     bottom: 0;
-    width: 200px;
+    // width: 200px;
     background-color: #112f50;
+    transition: all 0.2s;
   }
   .content {
     margin-left: 200px;
+    transition: all 0.5s;
+  }
+  .active{
+    margin-left:64px
+
   }
 }
 </style>
