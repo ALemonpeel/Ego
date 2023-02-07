@@ -13,11 +13,13 @@ import Home from '@/views/Home'
 import Goods from '@/views/MyLayout/Goods'
 import Category from '@/views/MyLayout/Goods/Category'
 import List from '@/views/MyLayout/Goods/list'
+
 //订单管理
 import Order from '@/views/MyLayout/Order'
 import Auditing from '@/views/MyLayout/Order/Auditing'
 import OrderList from '@/views/MyLayout/Order/list'
 import Collect from '@/views/MyLayout/Order/Collect'
+import AddGoods from '@/views/MyLayout/Goods/list/AddGoods.vue'
 //广告管理
 import Advert from '@/views/MyLayout/Advert'
 import AdvertList from '@/views/MyLayout/Advert/list'
@@ -48,6 +50,15 @@ const routes = [
             path: 'category',
             name: 'category',
             component: Category
+          },
+          {
+            path: 'addgoods',
+            name: 'addgoogs',
+            component: AddGoods,
+            //路由元信息
+            meta: {
+              activeMenu: '/goods/list'
+            }
           }
         ]
       },

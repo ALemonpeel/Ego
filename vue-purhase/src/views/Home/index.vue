@@ -25,9 +25,13 @@
     <div class="content">
       <div class="time-info" id='box13'>
         <div class="title">月销售额</div>
-        <div id="charts" style="width: 100%; height: 300px"></div>
+        <div id="main" style="width: 100%; height: 300px">
+        </div>
       </div>
-      <div class="area" id="box1">比例分配</div>
+      <div class="area" id="box1">
+        销售比例
+        <div id="main2" style="width: 100%; height: 300px"></div>
+      </div>
     </div>
 
 
@@ -41,13 +45,20 @@
         <div class="text item">
           <el-row>
             <el-col :span="8">
-              <div>111</div>
+              <div class="title">今日订单数</div>
+              <div>{{ infoData.curOrderCount }}</div>
             </el-col>
             <el-col :span="8">
-              <div>222</div>
+              <div class="title">汇总确认订单</div>
+              <div>{{
+                infoData.curCollect
+              }}</div>
             </el-col>
             <el-col :span="8">
-              <div>333</div>
+              <div class="title">累计金额</div>
+              <div>{{
+                infoData.curMoney
+              }}</div>
             </el-col>
           </el-row>
         </div>
@@ -59,13 +70,20 @@
         <div class="text item">
           <el-row>
             <el-col :span="8">
-              <div>111</div>
+              <div class="title">本月订单数</div>
+              <div>{{ infoData.collect }}</div>
             </el-col>
             <el-col :span="8">
-              <div>222</div>
+              <div class="title">汇总确认订单</div>
+              <div>{{
+                infoData.orderCount
+              }}</div>
             </el-col>
             <el-col :span="8">
-              <div>333</div>
+              <div class="title">累计金额</div>
+              <div>{{
+                infoData.money
+              }}</div>
             </el-col>
           </el-row>
         </div>
@@ -86,12 +104,15 @@
 </template>
 
 <script>
+import * as echarts from 'echarts';
 export default {
   data() {
     return {
       //储存信息
       list: {},
-      listTitle: ['销售额', '访问量', '收藏量', '支付量']
+      listTitle: ['销售额', '访问量', '收藏量', '支付量'],
+      //销售额信息
+      infoData: {}
     }
 
   },
@@ -104,13 +125,130 @@ export default {
   mounted() {
     //获取顶部统计信息
     this.getHomeCount();
+    //获取折线图数据
+    this.getHomeFormat();
+    // //绘制折线图方法
+    // this.line();
+    // //绘制饼图
+    // this.pie();
+    //获取订单数据
+    this.getHomeOrder()
   },
   methods: {
+    //获取顶部信息
     async getHomeCount() {
       let res = await this.$api.getHomeCount().then(res => {
         this.list = res.data.data.list;
       })
+    },
+    //绘制折线图数据
+    async getHomeFormat() {
+      let res = await this.$api.getHomeFormat().then(res => {
+        let arr = res.data.result.data.sale_money
+        // console.log(res.data.result.data.sale_money);
+        //声明变量获取x轴Y轴的数据
+        let xData = [], yData = [], yBearData = []
+        //获取对象结构的存储数组
+        let pieData = []
+        arr.forEach(ele => {
+          xData.push(ele.name)
+          yData.push(ele.total_amount)
+          yBearData.push(ele.num)
+          let obj = {}
+          obj.name = ele.name;
+          obj.value = ele.num;
+          pieData.push(obj)
+        });
+        //绘制折线图--动态数据
+        this.line(xData, yData, yBearData)
+        //绘制饼图  --动态数据  ---[{name:'',value:''},{},{}]
+        this.pie(pieData)
+      })
+    },
+    //订单数据
+    async getHomeOrder() {
+      let res = await this.$api.getHomeOrder().then(res => {
+        console.log(res.data);
+        this.infoData = res.data.list
+        console.log(this.info);
+      })
+    },
+    //绘制折线图
+    line(xData, yData, yBearData) {
+      var chartDom = document.getElementById('main');
+      var myChart = echarts.init(chartDom);
+      var option;
+
+      option = {
+        legend: {
+          data: ['销售额', '销售量']
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: {
+          type: 'category',
+          data: xData
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            name: '销售额',
+            data: yData,
+            type: 'line',
+            smooth: true
+          },
+          {
+            name: '销售量',
+            data: yBearData,
+            type: 'bar',
+            smooth: true
+          }
+        ]
+      };
+
+      option && myChart.setOption(option);
+    },
+    //绘制饼图
+    pie(pieData) {
+      var chartDom = document.getElementById('main2');
+      var myChart = echarts.init(chartDom);
+      var option;
+
+      option = {
+        legend: {
+          top: 'bottom'
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            mark: { show: true },
+            dataView: { show: true, readOnly: false },
+            restore: { show: true },
+            saveAsImage: { show: true }
+          }
+        },
+        series: [
+          {
+            name: '销售额',
+            type: 'pie',
+            radius: [50, 100],
+            center: ['50%', '50%'],
+            roseType: 'area',
+            itemStyle: {
+              borderRadius: 8
+            },
+            data: pieData,
+          }
+        ]
+      };
+
+      option && myChart.setOption(option);
+
     }
+
   }
 }
 </script>
@@ -206,6 +344,15 @@ export default {
 
     span {
       font-weight: 600;
+    }
+  }
+
+  .item {
+    text-align: center;
+    font-size: 14px;
+
+    .title {
+      margin-bottom: 10px;
     }
   }
 }

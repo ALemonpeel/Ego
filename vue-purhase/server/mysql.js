@@ -3,7 +3,7 @@ const mysql = require('mysql')
 
 //创建数据库连接
 const client = mysql.createConnection({
-    host: 'localhost', //数据域名 地址
+    host: '127.0.0.1', //数据域名 地址
     user: 'root', //数据名称
     password: '', //数据库密码 xampp集成
     database: 'ego',
@@ -11,8 +11,8 @@ const client = mysql.createConnection({
 })
 
 //封装数据库操作语句 sql语句 参数数组arr  callback成功函数结果
-function sqlFun(sql, arr,callback) {
-    client.query(sql,arr, function (error, result) {
+function sqlFun(sql, arr, callback) {
+    client.query(sql, arr, function (error, result) {
         if (error) {
             console.log('数据库语句错误');
             return;
@@ -21,4 +21,4 @@ function sqlFun(sql, arr,callback) {
     })
 }
 
-module.exports=sqlFun
+module.exports = sqlFun

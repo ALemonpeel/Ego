@@ -12,8 +12,8 @@
     el-menu-item       导航的每一项内容
 
    -->
-  <el-menu default-active="/" router class="el-menu-vertical-demo" background-color="#112f50"
-   text-color="#fff" active-text-color="#ffd04b" :collapse="isCollapse">
+  <el-menu :default-active="activeMenu()" router class="el-menu-vertical-demo" background-color="#112f50"
+    text-color="#fff" active-text-color="#ffd04b" :collapse="isCollapse">
     <el-menu-item index="/">
       <i class="el-icon-menu"></i>
       <span slot="title">系统首页</span>
@@ -65,7 +65,17 @@
 
 <script>
 export default {
-  props:['isCollapse']
+  props: ['isCollapse'],
+  methods: {
+    activeMenu() {
+      let route = this.$route;
+      console.log(route);
+      if (route.meta) {
+        return route.meta.activeMenu
+      }
+      return route.path
+    }
+  }
 };
 </script>
 
@@ -74,7 +84,13 @@ export default {
   width: 200px;
   min-height: 400px;
 }
-.el-menu{
+
+.el-menu {
   border: none;
+}
+
+.el-menu .is-active {
+  background-color: #1e78df !important;
+  color: #fff !important;
 }
 </style>
