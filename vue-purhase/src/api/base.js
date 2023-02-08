@@ -5,13 +5,17 @@ const base = {
   homeFormat: '/api/home/format',//首页折线图
   homeOrder: '/api/home/orderinfo',//首页今日订单
   //产品管理接口
-  goodsList: '/api/projectList',//商品列表接口
-  goodsSearch: '/api/search',//商品查询接口
-  goodsDelete: '/api/deleteItemById'//删除商品接口
+  goodsList: '/api/goods/projectList',//商品列表接口
+  goodsSearch: '/api/goods/search',//商品查询接口
+  goodsDelete: '/api/goods/deleteItemById',//删除商品接口
+  goodsClass: '/api/goods/itemCategory/selectItemCategoryByParentId', //获取类目的接口
+  addGoods: '/api/goods/item/insertTbItem',//添加商品的接口
+  updateTbItem: '/api/goods/item/updateTbItem',//更改商品的接口
 }
 //导出单个文件
 export const host = 'http://127.0.0.1:9898/'
 
-
+//导出图片地址
+export const upload = '/api/upload'
 
 export default base

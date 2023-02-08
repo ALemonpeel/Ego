@@ -25,8 +25,18 @@ const api = {
   //删除接口
   getgoodsDelete(params) {
     return axios.get(base.goodsDelete, { params })
+  },
+  //获取类目的接口
+  getgoodsClass(params) {
+    return axios.get(base.goodsClass, { params })
+  },
+  //添加商品的接口
+  addGoods(params) {
+    return axios.get(base.addGoods, { params })
+  },
+  updateTbItem(params) {
+    return axios.get(base.updateTbItem, { params })
   }
-
 }
 
 export default api

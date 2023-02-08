@@ -38,7 +38,7 @@
         </el-table-column>
         <el-table-column prop="price" label="价格" width="100">
         </el-table-column>
-        <el-table-column prop="title" label="库存" width="80">
+        <el-table-column prop="num" label="库存" width="80">
         </el-table-column>
         <el-table-column prop="category" label="规格/类目" width="150">
         </el-table-column>
@@ -50,9 +50,9 @@
             {{ dayjs(scope.row.create_time).format('YYYY-MM-DD HH:mm:ss') }}
           </template>
         </el-table-column>
-        <el-table-column prop="paramsInfo" label="商品买点" width="150">
+        <el-table-column prop="sellPoint" label="商品买点" width="150">
         </el-table-column>
-        <el-table-column prop="sellpoint" label="商品描述" width="150">
+        <el-table-column prop="descs" label="商品描述" width="150">
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -74,6 +74,7 @@
 <script>
 import dayjs from 'dayjs';
 import Pagination from '@/components/Pagination'
+import { mapMutations } from 'vuex';
 export default {
   data() {
     return {
@@ -98,9 +99,13 @@ export default {
   methods: {
     //把dayjs注册为方法
     dayjs,
+
+    //导入store仓库
+    ...mapMutations('Goods', ['ChangeTitle', 'ChangeGoods']),
     //添加商品
     addgoods() {
       this.$router.push('/goods/addgoods')
+      this.ChangeTitle('添加')
     },
     //获取页码
     getpagination(page) {
@@ -137,8 +142,17 @@ export default {
       })
     },
     //编辑
+    //点击编辑按钮 获取当前行的数据信息
+    //跳转到编辑页面（与添加页面为同一组件） 传递数据和title
+    //vuex储存 传递的数据和title
+    //获取vuex存储的数据 修改title 和当前行的数据
+
     handleEdit(index, row) {
       console.log(index, row);
+      //将信息存入仓库
+      this.ChangeTitle('编辑')
+      this.ChangeGoods(row)
+      this.$router.push('/goods/addgoods')
     },
     //删除
     handleDelete(index, row) {

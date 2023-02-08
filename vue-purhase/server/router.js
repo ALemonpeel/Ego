@@ -7,6 +7,9 @@ const sqlFn = require("./mysql");
 const Mock = require("mockjs");
 //数据
 const data = require("./data/format.json");
+//图片需要的模块
+const multer = require('multer')
+const fs = require('fs')
 
 //路由 ---接口地址
 /* 
@@ -108,7 +111,7 @@ router.get("/home/orderinfo", (req, res) => {
  * 商品列表：获取分页 {total:'',arr:[{},{},{}],pagesize:8,}
  * 参数：page 页码
  */
-router.get("/projectList", (req, res) => {
+router.get("/goods/projectList", (req, res) => {
   const page = req.query.page || 1;
   const sqlLen = "select * from project where id";
   sqlFn(sqlLen, null, (data) => {
@@ -136,7 +139,7 @@ router.get("/projectList", (req, res) => {
  * 商品查询接口 search
  * 参数：search
  */
-router.get("/search", (req, res) => {
+router.get("/goods/search", (req, res) => {
   var search = req.query.search;
   const sql = "select * from project where concat(`title`,`sellPoint`,`descs`) like '%" + search + "%'";
   sqlFn(sql, null, (result) => {
@@ -157,7 +160,7 @@ router.get("/search", (req, res) => {
 /**
  * 商品删除接口 id
  */
-router.get("/deleteItemById", (req, res) => {
+router.get("/goods/deleteItemById", (req, res) => {
   var id = req.query.id;
   const sql = "delete from project where id=?";
   const arr = [id];
@@ -209,6 +212,108 @@ router.get("/goods/item/insertTbItem", (req, res) => {
       })
     }
   })
+});
+/**
+ * 商品添加 类目选择
+ * 接口说明：接口不同的参数cid 返回不同的类目数据 后台接受变量：type
+ */
+router.get("/goods/itemCategory/selectItemCategoryByParentId", (req, res) => {
+  const type = req.query.type || 1;
+  console.log("type", type);
+  const sql = "select * from category where type=?";
+  var arr = [type];
+  sqlFn(sql, arr, (result) => {
+    if (result.length > 0) {
+      res.send({
+        status: 200,
+        result,
+      });
+    } else {
+      res.send({
+        status: 500,
+        msg: "暂无数据",
+      });
+    }
+  });
+});
+/**
+ * 上传图片 post请求 upload
+ * 说明：
+ *  1.后台安装 multer 模块   同时引入fs模块
+ *  2.router.js入口文件导入模块
+ *      const fs=require('fs')
+        const multer=require('multer')
+ *  3.上传图片 
+ * 
+ */
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./upload/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+var createFolder = function (folder) {
+  try {
+    fs.accessSync(folder);
+  } catch (e) {
+    fs.mkdirSync(folder);
+  }
+};
+
+var uploadFolder = "./upload/";
+createFolder(uploadFolder);
+var upload = multer({
+  storage: storage,
+});
+//上传图片
+router.post("/upload", upload.single("file"), function (req, res, next) {
+  var file = req.file;
+  console.log("文件类型：%s", file.mimetype);
+  console.log("原始文件名：%s", file.originalname);
+  console.log("文件大小：%s", file.size);
+  console.log("文件保存路径：%s", file.path);
+  res.json({
+    res_code: "0",
+    name: file.originalname,
+    url: file.path,
+  });
+});
+
+/**
+ * 修改商品
+ * id, title cid  category sellPoint price num descs paramsInfo image
+ */
+router.get("/goods/item/updateTbItem", (req, res) => {
+  var id = req.query.id;
+  var title = req.query.title || "";
+  var sellPoint = req.query.sellPoint || "";
+  var price = req.query.price || "";
+  var cid = req.query.cid || "";
+  var category = req.query.category || "";
+  var num = req.query.num || "";
+  var desc = req.query.descs || "";
+  var paramsInfo = req.query.paramsInfo || "";
+  var image = req.query.image || "";
+  var sql = "update project set title=?,sellPoint=?,price=?,cid=?,category=?,num=?,descs=?,paramsInfo=?,image=? where id=?";
+  var arr = [title, sellPoint, price, cid, category, num, desc, paramsInfo, image, id];
+  sqlFn(sql, arr, result => {
+    if (result.affectedRows > 0) {
+      res.send({
+        status: 200,
+        msg: "修改成功"
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: "修改失败"
+      })
+    }
+  })
 })
+
 
 module.exports = router;
