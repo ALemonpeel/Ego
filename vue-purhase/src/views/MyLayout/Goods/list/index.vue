@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div class="lujing">首页 / 商品管理 / 商品列表</div>
+    <div class="lujing">
+      <Breadcrumb></Breadcrumb>
+    </div>
     <!-- 搜索区域 -->
     <div class="header-search">
       <el-form :inline="true" class="demo-form-inline">
@@ -25,16 +27,20 @@
     <!-- 按钮 -->
     <div class="btn">
       <el-button size="mini" type="warning" @click="addgoods">添加商品</el-button>
-      <el-button size="mini" type="danger">批量删除</el-button>
+      <el-button size="mini" type="danger" @click="deletegoods">批量删除</el-button>
     </div>
     <!-- 列表区域 -->
     <div class="list">
-      <el-table :data="tableline" style="width: 100%" :border="true" class="table">
+      <el-table :data="tableline" style="width: 100%" :border="true" class="table"
+        @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="50">
         </el-table-column>
         <el-table-column prop="id" label="产品编号" width="80">
         </el-table-column>
         <el-table-column prop="title" label="产品名称" width="80">
+          <template slot-scope="scope">
+            <span @click="goodsDesc(scope.row)" style="color: blue; cursor: pointer;">{{ scope.row.title }}</span>
+          </template>
         </el-table-column>
         <el-table-column prop="price" label="价格" width="100">
         </el-table-column>
@@ -52,9 +58,14 @@
         </el-table-column>
         <el-table-column prop="sellPoint" label="商品买点" width="150">
         </el-table-column>
-        <el-table-column prop="descs" label="商品描述" width="150">
+        <el-table-column label="商品描述" width="150">
+          <template slot-scope="scope">
+            <!-- <span v-html="scope.row.descs"></span> -->
+            {{ removeHTMLTag(scope.row.descs) }}
+
+          </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)"><i
                 class="iconfont icon-xiugai"></i> 编辑</el-button>
@@ -75,6 +86,7 @@
 import dayjs from 'dayjs';
 import Pagination from '@/components/Pagination'
 import { mapMutations } from 'vuex';
+import { removeHTMLTag } from '@/utils'
 export default {
   data() {
     return {
@@ -89,7 +101,11 @@ export default {
       total: 100,
       listTotal: [],
       //查询的状态
-      searchStatus: false
+      searchStatus: false,
+      //要批量删除的商品id
+      goodsid: [],
+      //固定删除后的页码
+      currentPage: 1,
     }
   },
   created() {
@@ -97,6 +113,8 @@ export default {
     this.getGoodsList(1)
   },
   methods: {
+
+    removeHTMLTag,
     //把dayjs注册为方法
     dayjs,
 
@@ -107,9 +125,61 @@ export default {
       this.$router.push('/goods/addgoods')
       this.ChangeTitle('添加')
     },
-    //获取页码
+    //商品详情页
+    goodsDesc(row) {
+      console.log(row);
+      this.ChangeTitle('详情')
+      this.ChangeGoods(row)
+      this.$router.push('/goods/addgoods')
+    },
+    //批量删除
+    deletegoods() {
+      this.$confirm('此操作将永久删除该商品, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log('商品id--------------------', this.goodsid);
+        let ids = this.goodsid.join(',')
+        console.log(ids);
+        this.deleteAll(ids)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    //获取要删除的id
+    handleSelectionChange(val) {
+      console.log(val);
+      let ids = []
+      val.forEach(ele => {
+        ids.push(ele.id)
+      });
+      console.log(ids);
+      this.goodsid = ids
+    },
+    //调用批量删除的接口删除商品
+    async deleteAll(ids) {
+      let res = await this.$api.batchDelete({ ids })
+      console.log(res.data);
+      if (res.data.status === 200) {
+        //删除成功
+        console.log(this.currentPage);
+        this.getGoodsList(this.currentPage)
+        this.$message({
+          type: 'success',
+          message: res.data.msg
+        });
+      }
+
+    },
+    //分页
     getpagination(page) {
-      if (this.searchStatus) {    //未点击查询按钮
+      this.currentPage = page
+      if (this.searchStatus) {
+        //未点击查询按钮
         this.tableline = this.listTotal.slice((page - 1) * 8, page * 8)
         return;
       }
@@ -179,9 +249,10 @@ export default {
       }
     },
 
+
   },
   components: {
-    Pagination
+    Pagination,
   }
 
 };

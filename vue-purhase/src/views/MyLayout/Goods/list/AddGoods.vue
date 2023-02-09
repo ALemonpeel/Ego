@@ -12,7 +12,7 @@
       <el-col :span="20">
         <div class="content">
           <div class="subtitle">
-            {{ Title }}商品
+            商品{{ Title }}
           </div>
           <div class="table">
             <!--
@@ -45,7 +45,7 @@
                 </el-col>
               </el-row>
               <el-form-item label="商品描述" prop="descs">
-                <Edittor @sendEditor="sendEditor" :eaitorData="eaitor"></Edittor>
+                <Edittor @sendEditor="sendEditor" :eaitorData="eaitor" ref="Reseteditor"></Edittor>
               </el-form-item>
               <el-form-item label="商品图片" prop="image">
                 <AddImage @getImgurl="getImgurl" :fileList="fileList"></AddImage>
@@ -62,8 +62,8 @@
                 </el-form-item>
               </div>
               <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
-                <el-button @click="resetForm('ruleForm')">重置</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')" v-show="Title != '详情'">保存</el-button>
+                <el-button @click="resetForm('ruleForm')">{{ btntext }}</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -87,12 +87,34 @@ export default {
   },
   //从仓库中获取数据
   computed: {
-    ...mapState('Goods', ['Title', 'goodsData'])
-
+    ...mapState('Goods', ['Title', 'goodsData']),
   },
   //
   mounted() {
+
+
+
     if (this.Title === '编辑') {
+      this.btntext = '取消'
+      //获取仓库中的行数据
+      //处理图片 ------------------------------
+      this.GoodsForm = this.goodsData
+      console.log(this.goodsData);
+      let images = JSON.parse(this.goodsData.image)
+      this.GoodsForm.image = images//获取vuex里面的数组 转成数组的语法
+      console.log(images);
+      let arr = []
+      images.forEach(ele => {
+        let obj = {}
+        obj.url = ele
+        arr.push(obj)
+      });
+      this.fileList = arr
+      //获取富文本编辑数据------------------------------------
+      this.eaitor = this.goodsData.descs
+
+    } else if (this.Title === '详情') {
+      this.btntext = '取消'
       //获取仓库中的行数据
       //处理图片 ------------------------------
       this.GoodsForm = this.goodsData
@@ -115,6 +137,7 @@ export default {
   },
   data() {
     return {
+      btntext: '重置',
       fileList: [],//图片容器
       eaitor: '',//富文本编辑器内容容器
       GoodsForm: {
@@ -129,7 +152,7 @@ export default {
         descs: "",
         isBanner: true,
         recommemd: true,
-        shelves: true
+        shelves: true,
       },
       rules: {
         title: [
@@ -216,9 +239,40 @@ export default {
         }
       });
     },
+    //重置表单项------------------------------------
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      console.log(this.Title);
+      //判断是新增还是编辑
+      //新增状态 -----------------------------
+      if (this.Title === '添加') {
+        //手动清空
+        //   this.GoodsForm={
+        //   id: '',
+        //   cid: '',
+        //   category: "",
+        //   title: "",
+        //   price: "",
+        //   num: "",
+        //   sellPoint: "",
+        //   image: [],
+        //   descs: "",
+        //   isBanner: true,
+        //   recommemd: true,
+        //   shelves: true
+        // }
+        //调用element-ui提供的方法清空
+        this.$refs[formName].resetFields();
+        //图片上传组件清空列表
+        this.fileList = []
+        //富文本编辑器清空内容
+        this.$refs.Reseteditor.clear()
+      } else {
+        //编辑状态-----------------------------
+        this.$router.push('/goods/list')
+      }
     }
+
+
   },
 }
 

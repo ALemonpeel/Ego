@@ -12,7 +12,7 @@
     el-menu-item       导航的每一项内容
 
    -->
-  <el-menu :default-active="activeMenu()" router class="el-menu-vertical-demo" background-color="#112f50"
+  <el-menu :default-active="$route.path" router class="el-menu-vertical-demo" background-color="#112f50"
     text-color="#fff" active-text-color="#ffd04b" :collapse="isCollapse">
     <el-menu-item index="/">
       <i class="el-icon-menu"></i>
@@ -67,14 +67,14 @@
 export default {
   props: ['isCollapse'],
   methods: {
-    activeMenu() {
-      let route = this.$route;
-      console.log(route);
-      if (route.meta) {
-        return route.meta.activeMenu
-      }
-      return route.path
-    }
+    // activeMenu() {
+    //   let route = this.$route;
+    //   console.log(route);
+    //   if (route.meta) {
+    //     return route.meta.activeMenu
+    //   }
+    //   return route.path
+    // }
   }
 };
 </script>

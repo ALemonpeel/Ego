@@ -47,6 +47,10 @@ export default {
       //将数据发往AddGoods组件
       this.$emit('sendEditor', this.html)
     },
+    //将该方法在AddGoods中调用，重置富文本编辑器中的数据
+    clear() {
+      this.html = ''
+    }
     // onBlur() {
     //   this.$emit('sendEditor', this.html)
     // },

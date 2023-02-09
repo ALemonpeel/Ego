@@ -30,26 +30,42 @@ const routes = [
   {
     path: '/',
     component: MyLayout,
+    meta: {
+      title: "首页"
+    },
     children: [
       {
         path: '/',
         name: 'home',
-        component: Home
+        component: Home,
+        meta: {
+          title: "首页"
+        }
       },
       {
         path: '/goods',
         name: 'goods',
+        meta: {
+          title: "产品管理"
+        },
+        redirect: '/goods/list',
         component: Goods,
         children: [
           {
             path: 'list',
             name: 'list',
-            component: List
+            component: List,
+            meta: {
+              title: "产品列表"
+            },
           },
           {
             path: 'category',
             name: 'category',
-            component: Category
+            component: Category,
+            meta: {
+              title: "产品分类"
+            },
           },
           {
             path: 'addgoods',
@@ -57,6 +73,7 @@ const routes = [
             component: AddGoods,
             //路由元信息
             meta: {
+
               activeMenu: '/goods/list'
             }
           }
@@ -66,21 +83,34 @@ const routes = [
         path: '/order',
         name: 'order',
         component: Order,
+        meta: {
+          title: "订单管理"
+        },
+        redirect: '/order/orderlist',
         children: [
           {
             path: 'orderlist',
             name: 'orderlist',
-            component: OrderList
+            component: OrderList,
+            meta: {
+              title: "订单列表"
+            },
           },
           {
             path: 'auditing',
             name: 'auditing',
-            component: Auditing
+            component: Auditing,
+            meta: {
+              title: "汇总清单"
+            },
           },
           {
             path: 'collect',
             name: 'collect',
-            component: Collect
+            component: Collect,
+            meta: {
+              title: "订单审核"
+            },
           }
         ]
       },
@@ -88,6 +118,7 @@ const routes = [
         path: '/advert',
         name: 'advert',
         component: Advert,
+        redirect: '/advert/advertlist',
         children: [
           {
             path: 'advertlist',

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { number } from 'echarts';
+
 
 export default {
   props: {

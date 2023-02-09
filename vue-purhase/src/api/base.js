@@ -11,6 +11,11 @@ const base = {
   goodsClass: '/api/goods/itemCategory/selectItemCategoryByParentId', //获取类目的接口
   addGoods: '/api/goods/item/insertTbItem',//添加商品的接口
   updateTbItem: '/api/goods/item/updateTbItem',//更改商品的接口
+  batchDelete: '/api/goods/batchDelete',//批量删除的接口
+  //订单列表接口
+  orderList: '/api/order/list',  //订单列表的接口
+  changeStatus: '/api/order/changeStatus' //订单汇总接口
+
 }
 //导出单个文件
 export const host = 'http://127.0.0.1:9898/'

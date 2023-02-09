@@ -10,6 +10,6 @@ export default {
     },
     ChangeGoods(state, payload) {
       state.goodsData = payload
-    }
+    },
   }
 }

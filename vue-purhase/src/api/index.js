@@ -34,8 +34,21 @@ const api = {
   addGoods(params) {
     return axios.get(base.addGoods, { params })
   },
+  //修改商品的接口
   updateTbItem(params) {
     return axios.get(base.updateTbItem, { params })
+  },
+  //批量删除商品的接口
+  batchDelete(params) {
+    return axios.get(base.batchDelete, { params })
+  },
+  //订单列表的接口
+  orderList(params) {
+    return axios.get(base.orderList, { params })
+  },
+  //订单汇总接口
+  changeStatus(params) {
+    return axios.get(base.changeStatus, { params })
   }
 }
 
