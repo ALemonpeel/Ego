@@ -6,6 +6,7 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
+  Drawer,
   Menu,
   Submenu,
   MenuItem,
@@ -85,6 +86,7 @@ Vue.use(Autocomplete);
 Vue.use(Dropdown);
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
+Vue.use(Drawer);
 Vue.use(Menu);
 Vue.use(Submenu);
 Vue.use(MenuItem);

@@ -14,8 +14,16 @@ const base = {
   batchDelete: '/api/goods/batchDelete',//批量删除的接口
   //订单列表接口
   orderList: '/api/order/list',  //订单列表的接口
-  changeStatus: '/api/order/changeStatus' //订单汇总接口
-
+  changeStatus: '/api/order/changeStatus', //订单汇总接口
+  detail: '/api/order/list/detail',//订单详情接口
+  collect: '/api/order/collect', //汇总订单列表接口
+  cancel: '/api/order/cancel', //撤销汇总的接口
+  //类目管理
+  itemCategory: '/api/itemCategory',//获取所有类目
+  insertCategory: '/api/itemCategory/insertCategory',//新增一级类目
+  updateCategory: '/api/itemCategory/updateCategory', //修改类目名称
+  deleteContentCategoryById: '/api/content/deleteContentCategoryById',//删除类目
+  insertItemCategory: '/api/itemCategory/insertItemCategory' //添加子类目
 }
 //导出单个文件
 export const host = 'http://127.0.0.1:9898/'

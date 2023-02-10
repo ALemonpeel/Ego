@@ -338,5 +338,117 @@ router.get("/goods/batchDelete", (req, res) => {
   })
 })
 
+/* 
+所有类目
+*/
+router.get("/itemCategory", (req, res) => {
+  const sql = "select * from category"
+  sqlFn(sql, null, result => {
+    if (result.length > 0) {
+      res.send({
+        status: 200,
+        result
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: "暂无数据"
+      })
+    }
+  })
+})
+/* 
+  类目管理 增加一级导航类目
+
+*/
+router.get("/itemCategory/insertCategory", (req, res) => {
+  console.log('-------------');
+  const name = req.query.name;
+  //模拟不重复的数据
+  const cid = Math.ceil(new Date().getTime() / 1000)
+  // const type='1';
+  const sql = "insert into category values (null,?,?,'1')"
+  sqlFn(sql, [name, cid], result => {
+    if (result.affectedRows > 0) {
+      res.send({
+        status: 200,
+        msg: "添加成功"
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: "添加失败"
+      })
+    }
+  })
+})
+/* 
+  类目管理 修改导航类目
+*/
+router.get("/itemCategory/updateCategory", (req, res) => {
+  const id = req.query.id;
+  const name = req.query.name;
+  const sql = "update category set name=? where id=?"
+  sqlFn(sql, [name, id], result => {
+    if (result.affectedRows > 0) {
+      res.send({
+        status: 200,
+        msg: "修改成功"
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: "修改失败"
+      })
+    }
+  })
+})
+
+/**
+*分类管理 删除导航 id
+*/
+router.get("/content/deleteContentCategoryById", (req, res) => {
+  const id = req.query.id;
+  const sql = "delete from category where id=?"
+  sqlFn(sql, [id], result => {
+    if (result.affectedRows > 0) {
+      res.send({
+        status: 200,
+        msg: "删除成功"
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: "删除失败"
+      })
+    }
+  })
+})
+
+
+/**
+* 所有类目管理 增加子导航
+* cid  name
+*/
+router.get("/itemCategory/insertItemCategory", (req, res) => {
+  const type = req.query.cid;
+  const name = req.query.name;
+  const cid = Math.ceil(new Date().getTime() / 1000)
+  const sql = "insert into category values (null,?,?,?)"
+  sqlFn(sql, [name, cid, type], result => {
+    if (result.affectedRows > 0) {
+      res.send({
+        status: 200,
+        msg: "添加成功"
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: "添加失败"
+      })
+    }
+  })
+})
+
 
 module.exports = router;

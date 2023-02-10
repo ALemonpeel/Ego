@@ -3,11 +3,12 @@
     <!--1.  顶部区域布局---------- -->
     <div class="header">
       <div class="item">
-        {{ listTitle[0]}}
+        {{ $t('home.totalmoney') }}
         <div class='num'>{{ list.payTotal | num }}</div>
         <div class="bottom">今日{{ listTitle[0]}}:{{ list.pay | num }}</div>
       </div>
-      <div class="item">{{ listTitle[1]}}
+      <div class="item">
+        {{ $t('home.totalviews') }}
         <div class='num'>{{ list.saleTotal | num }}</div>
         <div class="bottom">今日{{ listTitle[1]}}：{{ list.sale | num }}</div>
       </div>

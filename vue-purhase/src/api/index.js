@@ -49,6 +49,38 @@ const api = {
   //订单汇总接口
   changeStatus(params) {
     return axios.get(base.changeStatus, { params })
+  },
+  //订单详情接口
+  detail() {
+    return axios.get(base.detail)
+  },
+  //汇总订单列表接口
+  collect(params) {
+    return axios.get(base.collect, { params })
+  },
+  cancel(params) {
+    return axios.get(base.cancel, { params })
+
+  },
+  //获取所有类目
+  itemCategory() {
+    return axios.get(base.itemCategory)
+  },
+  //新增以及类目
+  insertCategory(params) {
+    return axios.get(base.insertCategory, { params })
+  },
+  //修改类目名称
+  updateCategory(params) {
+    return axios.get(base.updateCategory, { params })
+  },
+  //删除类目
+  deleteContentCategoryById(params) {
+    return axios.get(base.deleteContentCategoryById, { params })
+  },
+  //添加子类目
+  insertItemCategory(params) {
+    return axios.get(base.insertItemCategory, { params })
   }
 }
 

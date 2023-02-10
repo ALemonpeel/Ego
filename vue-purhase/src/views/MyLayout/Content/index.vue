@@ -11,6 +11,16 @@
       <div class="reight">
         <span>当前时间:{{ nowTime }}</span>
         <span class="fenge">|</span>
+        <el-dropdown @command="handleCommand">
+          <span class="el-dropdown-link">
+            {{ internationalization }}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="myzh">中文</el-dropdown-item>
+            <el-dropdown-item command="myen">English</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <span class="fenge">|</span>
         <span>欢迎xxx</span>
         <span class="fenge">|</span>
         <span class="exit">
@@ -30,13 +40,24 @@ export default {
   props: ['isCollapse'],
   data() {
     return {
-      nowTime: ''
-
+      nowTime: '',
+      //国际化名称
+      internationalization: '国际化',
     }
   },
   methods: {
+    //展示或折叠左侧导航区域
     changemenu() {
       this.$emit('changeMenu')
+    },
+    //国际化
+    handleCommand(command) {
+      this.$i18n.locale = command
+      if (command === 'myzh') {
+        this.internationalization = '中文'
+      } else if (command === 'myen') {
+        this.internationalization = 'English'
+      }
     }
   },
   created() {
@@ -81,5 +102,14 @@ export default {
     }
 
   }
+}
+
+.el-dropdown-link {
+  cursor: pointer;
+  color: #fff;
+}
+
+.el-icon-arrow-down {
+  font-size: 12px;
 }
 </style>

@@ -162,28 +162,29 @@ router.get("/collect", (req, res) => {
 router.get("/cancel", (req, res) => {
   //查询数据库
   const id = req.query.id;
+  console.log(id);
   //查询
   const sql = `select ids from collect where id=${id}`;
   sqlFn(sql, null, (arr) => {
     const ids = arr[0].ids;
     //删除
-    const sqldel= `delete from collect where id=${id}`;
-    sqlFn(sqldel,null,result=>{
-        //修改
-        const sql = `update orderinfo set huizongStatus='1' where id in (${ids})`;
-        sqlFn(sql,null,data=>{
-            if (data.affectedRows > 0) {
-                res.send({
-                  status: 200,
-                  msg: "修改成功",
-                });
-            }else{
-                res.send({
-                    status: 500,
-                    msg: "修改失败",
-                  });
-            }
-        })
+    const sqldel = `delete from collect where id=${id}`;
+    sqlFn(sqldel, null, result => {
+      //修改
+      const sql = `update orderinfo set huizongStatus='1' where id in (${ids})`;
+      sqlFn(sql, null, data => {
+        if (data.affectedRows > 0) {
+          res.send({
+            status: 200,
+            msg: "修改成功",
+          });
+        } else {
+          res.send({
+            status: 500,
+            msg: "修改失败",
+          });
+        }
+      })
     })
 
   });

@@ -17,13 +17,16 @@ import api from './api'
 Vue.prototype.$api = api
 //将Breadcrumb注册为全局组件
 import Breadcrumb from '@/components/Breadcrumb'
-
+//导入JsonExcel
+import JsonExcel from 'vue-json-excel'
+Vue.component('downloadExcel', JsonExcel)
 Vue.component('Breadcrumb', Breadcrumb)
-
-Vue.config.productionTip = false
+//导入vue-i18n配置文件
+import i18n from './lang/index'
 
 new Vue({
   router,
   store,
+  i18n,
   render: h => h(App)
 }).$mount('#app')

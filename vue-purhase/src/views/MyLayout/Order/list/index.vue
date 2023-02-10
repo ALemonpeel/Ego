@@ -20,10 +20,15 @@
     </div>
     <!-- 订单列表按钮 -->
     <div class="btn">
-      <el-row>
-        <el-button type="primary" size="mini" @click="orderCollect">订单汇总</el-button>
-        <el-button type="success" size="mini">导出</el-button>
-      </el-row>
+
+      <el-button type="primary" size="mini" @click="orderCollect">订单汇总</el-button>
+
+      <download-excel class="export-excel-wrapper" :data="DetailsForm" :fields="json_fields" :header="title"
+        :name="title">
+        <!-- 上面可以自定义自己的样式，还可以引用其他组件button -->
+        <el-button type="success" size="mini" class="daochu" @click="download">导出</el-button>
+      </download-excel>
+
     </div>
     <!-- 表格 -->
     <div class="table">
@@ -31,7 +36,10 @@
 
         <el-table-column type="selection" width="55" :selectable="selectFun">
         </el-table-column>
-        <el-table-column prop="id" label="订单编号" width="100">
+        <el-table-column prop="code" label="订单编号" width="200">
+          <template slot-scope="scope">
+            <span @click="goxiangqing(scope.row)" style="color: blue; cursor: pointer;">{{ scope.row.code }}</span>
+          </template>
         </el-table-column>
         <el-table-column prop="ordername" label="下单人" width="100">
         </el-table-column>
@@ -56,12 +64,19 @@
       <!-- 分页 -->
       <Pagination :pageSize="pageSize" :total="total" @getpagination="getpagination"></Pagination>
     </div>
+    <!-- 抽屉 显示订单详情 -->
+    <div class="drawer">
+      <el-drawer title="订单详情" :visible.sync="drawer" :direction="direction" size="87%">
+        <OrderDes></OrderDes>
+      </el-drawer>
+    </div>
   </div>
 </template>
 
 <script>
 import dayjs from 'dayjs';
 import Pagination from '@/components/Pagination'
+import OrderDes from './orderDes.vue'
 export default {
   data() {
     return {
@@ -69,6 +84,30 @@ export default {
         user: '',
         region: ''
       },
+      //配置表头字段文字
+      json_fields: {
+        "订单编号": {
+          field: "code",
+          callback: value => {
+            return '&nbsp;' + value
+          }
+        },
+        "下单人": "ordername",
+        "所属单位": "company",
+        "联系电话": {
+          field: 'phone',
+          callback: value => {
+            return '&nbsp;' + value
+          }
+        },
+        "预定时间": "yudingTime",
+        "订单价格": "price",
+        "汇总状态": "huizongStatus"
+      },
+      //需要导出的数据
+      DetailsForm: [],
+      //导出的表格名称
+      title: '首客生鲜订单列表',
       //表数据
       tableData: [],
       //页码
@@ -79,6 +118,10 @@ export default {
       selectIds: [],
       //固定汇总后的页码
       currentPage: 1,
+      //抽屉的方向 和是否打开
+      drawer: false,
+      direction: 'rtl',
+
     }
   },
   created() {
@@ -86,6 +129,18 @@ export default {
   },
   methods: {
     dayjs,
+    download() {
+      let arr = [...this.tableData]
+      arr.forEach(ele => {
+        ele.yudingTime = dayjs(ele.yudingTime).format('YYYY-MM-DD HH:mm:ss')
+        ele.huizongStatus = ele.huizongStatus == 1 ? '未汇总' : "已汇总"
+      })
+      this.DetailsForm = arr
+    },
+    //点击进入订单详情
+    goxiangqing(val) {
+      this.drawer = !this.drawer
+    },
     //禁用已汇总的选项框
     selectFun(row, index) {
       if (row.huizongStatus === 1) {
@@ -160,7 +215,8 @@ export default {
     },
   },
   components: {
-    Pagination
+    Pagination,
+    OrderDes
   }
 };
 </script>
@@ -180,6 +236,11 @@ export default {
     border: 1px solid #eee;
     padding: 10px;
     border-radius: 5px;
+    display: flex;
+
+    .daochu {
+      margin-left: 10px;
+    }
   }
 }
 </style>
