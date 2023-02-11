@@ -23,7 +23,11 @@ const base = {
   insertCategory: '/api/itemCategory/insertCategory',//新增一级类目
   updateCategory: '/api/itemCategory/updateCategory', //修改类目名称
   deleteContentCategoryById: '/api/content/deleteContentCategoryById',//删除类目
-  insertItemCategory: '/api/itemCategory/insertItemCategory' //添加子类目
+  insertItemCategory: '/api/itemCategory/insertItemCategory', //添加子类目
+
+  //登录的接口
+  login: '/api/login',   //登录接口
+  permission: '/api/permission' //用户权限数据接口
 }
 //导出单个文件
 export const host = 'http://127.0.0.1:9898/'

@@ -81,7 +81,14 @@ const api = {
   //添加子类目
   insertItemCategory(params) {
     return axios.get(base.insertItemCategory, { params })
-  }
+  },
+  //登录接口
+  Login(params) {
+    return axios.post(base.login, params)
+  },
+  //权限数据接口
 }
-
+export function permission(params) {
+  return axios.get(base.permission, { params })
+}
 export default api

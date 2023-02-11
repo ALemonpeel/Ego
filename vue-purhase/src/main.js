@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import _ from 'lodash'
+import './router/router-permission'
 import store from './store'
 import './plugins/element.js'
 //css初始化

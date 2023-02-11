@@ -21,7 +21,7 @@
           </el-dropdown-menu>
         </el-dropdown>
         <span class="fenge">|</span>
-        <span>欢迎xxx</span>
+        <span>欢迎 {{ userinfo.user }}</span>
         <span class="fenge">|</span>
         <span class="exit">
           <i class="iconfont icon-tuichu"></i>
@@ -36,6 +36,7 @@
 <script>
 //导入dayjs
 import second from 'dayjs'
+import { mapState } from 'vuex';
 export default {
   props: ['isCollapse'],
   data() {
@@ -43,9 +44,11 @@ export default {
       nowTime: '',
       //国际化名称
       internationalization: '国际化',
+      user: ''
     }
   },
   methods: {
+
     //展示或折叠左侧导航区域
     changemenu() {
       this.$emit('changeMenu')
@@ -59,6 +62,10 @@ export default {
         this.internationalization = 'English'
       }
     }
+  },
+  computed: {
+    //获取用户名
+    ...mapState('Login', ['userinfo']),
   },
   created() {
     //获取当前时间

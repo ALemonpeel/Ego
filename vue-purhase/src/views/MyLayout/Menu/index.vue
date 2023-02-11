@@ -49,14 +49,14 @@
         <el-menu-item index="1-2" disabled>分类管理</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
-    <el-submenu index="5" disabled>
+    <el-submenu index="/management">
       <template slot="title">
         <i class="el-icon-location"></i>
         <span slot="title">系统管理</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="1-1">角色管理</el-menu-item>
-        <el-menu-item index="1-2">部门管理</el-menu-item>
+        <el-menu-item index="/management/role">角色管理</el-menu-item>
+        <el-menu-item index="/management/department">部门管理</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
   </el-menu>

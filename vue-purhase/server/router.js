@@ -11,6 +11,35 @@ const data = require("./data/format.json");
 const multer = require('multer')
 const fs = require('fs')
 
+//模拟登录信息
+const vipLogin = require("./login/data/vip_login.json");
+const adminLogin = require("./login/data/admin_login.json");
+const adminPermission = require("./login/data/admin_permission.json");
+const vipPermission = require("./login/data/vip_permission.json");
+
+
+//登录-分权限 1. 超级管理员 admin   2. 其他账号 vip账号 3.
+router.post("/login", (req, res) => {
+  const username = req.body.user;
+  const pwd = req.body.pwd;
+  if (username === 'admin') {//超级管理员
+    res.send(adminLogin)
+  } else {
+    res.send(vipLogin)//普通VIP用户 
+  }
+})
+
+//用户权限数据接口
+router.get("/permission", (req, res) => {
+  const token = req.query.token;
+  if (token === 'admin') {
+    res.send(adminPermission)
+  } else {
+    res.send(vipPermission)
+  }
+})
+
+
 //路由 ---接口地址
 /* 
     首页-销量额等数据统计
