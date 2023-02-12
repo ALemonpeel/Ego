@@ -24,6 +24,8 @@
 </template>
 
 <script>
+
+
 let id = 1000;
 export default {
   data() {
@@ -35,8 +37,8 @@ export default {
   },
   created() {
     this.itemCategory()
-  },
 
+  },
   methods: {
     //新增的方法
     append() {

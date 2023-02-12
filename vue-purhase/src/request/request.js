@@ -10,8 +10,8 @@ import qs from 'querystring'
  *     status:状态
  *     info:错误信息
  */
- const errorHandle = (status,info) =>{
-    switch(status){
+const errorHandle = (status, info) => {
+    switch (status) {
         case 400:
             console.log("表示请求报文中存在语法错误");
             break;
@@ -43,19 +43,19 @@ import qs from 'querystring'
 //创建实例 
 const instance = axios.create({
     // baseURL: 'http://iwenwiki.com/',//请求的基本的路径地址
-    baseURL:process.env.NODE_ENV=='production'?process.env.VUE_APP_BASE_URL:'',
-    timeout:5000,//等待响应的时间5s 
+    baseURL: process.env.NODE_ENV == 'production' ? process.env.VUE_APP_BASE_URL : '',
+    timeout: 5000,//等待响应的时间5s 
 })
 
 // 添加请求拦截器
 instance.interceptors.request.use(function (config) {
-    if(config.method == 'post'){
+    if (config.method == 'post') {
         //参数传递：{useename:qq,password:123}  --->字符串  username=qq&password=123 
         config.data = qs.stringify(config.data)
     }
     // 在发送请求之前做些什么
     return config;
-  }, function (error) {
+}, function (error) {
     // 对请求错误做些什么
     return Promise.reject(error);
 });
@@ -65,12 +65,12 @@ instance.interceptors.request.use(function (config) {
 instance.interceptors.response.use(function (response) {
     // 对响应数据做点什么
     return response;
-  }, function (error) {
+}, function (error) {
     //解析返回的错误的状态码  给状态码解析含义 让前端更好的定位错误
-    console.log('添加响应拦截器',error);
+    console.log('添加响应拦截器', error);
     const { response } = error;
     //response.status 错误状态   500 服务器错误
-    errorHandle(response.status,response.info)
+    errorHandle(response.status, response.info)
     // 对响应错误做点什么
     // return Promise.reject(error);
 });

@@ -10,7 +10,7 @@ Vue.use(VueRouter)
 //导入组件
 import MyLogin from '@/views/MyLogin/MyLogin.vue'
 import MyLayout from '@/views/MyLayout/MyLayout.vue'
-import Home from '@/views/Home'
+import Home from '@/views/Home/index.vue'
 
 export const baseRouter = [
   {
@@ -34,7 +34,7 @@ export const baseRouter = [
 ]
 
 
-const routes = [
+export const routes = [
   {
     path: '/login',
     name: 'login',
@@ -46,7 +46,7 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
 })
 
 export default router

@@ -47,12 +47,13 @@ export const menu = [
       },
       {
         path: 'addgoods',
-        name: 'addgoogs',
+        name: 'addgoods',
         component: AddGoods,
         //路由元信息
         meta: {
-
-          activeMenu: '/goods/list'
+          isShow: true,
+          activeMenu: '/goods/list',
+          title: "添加商品",
         }
       }
     ]

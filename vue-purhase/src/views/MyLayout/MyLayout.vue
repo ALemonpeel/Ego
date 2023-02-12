@@ -5,7 +5,7 @@
       <Menu :isCollapse="isCollapse"></Menu>
     </div>
     <!-- 右侧内容区 -->
-    <div class="content" :class="{active:isCollapse}">
+    <div class="content" :class="{ active: isCollapse }">
       <Content @changeMenu="changeMenu" :isCollapse="isCollapse"></Content>
     </div>
   </div>
@@ -20,16 +20,21 @@ export default {
     Menu,
     Content,
   },
-  data(){
-    return{
-      isCollapse:false
+  data() {
+    return {
+      isCollapse: false
     }
   },
-  methods:{
-    changeMenu(){
-        this.isCollapse = !this.isCollapse
-      }
+  methods: {
+    changeMenu() {
+      this.isCollapse = !this.isCollapse
+    }
+  },
+  destroyed() {
+    this.$router.go(0)
   }
+
+
 };
 </script>
 
@@ -44,13 +49,14 @@ export default {
     background-color: #112f50;
     transition: all 0.2s;
   }
+
   .content {
     margin-left: 200px;
     transition: all 0.5s;
   }
-  .active{
-    margin-left:64px
 
+  .active {
+    margin-left: 64px
   }
 }
 </style>

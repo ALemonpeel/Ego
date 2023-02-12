@@ -1,4 +1,4 @@
-import router from './index'
+import router, { baseRouter } from './index'
 import store from '@/store/index.js'
 //导航全局前置守卫
 
@@ -18,10 +18,15 @@ router.beforeEach((to, from, next) => {
         next()
       } else {
         //没有导航
-        store.dispatch('Menu/getMenuList')
-        //next()
-      }
+        store.dispatch('Menu/getMenuList').then(baseRouter => {
+          router.options.routes.push(...baseRouter)
+          router.addRoutes(baseRouter)
+          //next({...to,replace:true}) 中断当前的导航 执行新的导航
 
+          next({ ...to, replace: true })
+        })
+
+      }
     } else {
       next('/login')
     }

@@ -23,7 +23,7 @@
         <span class="fenge">|</span>
         <span>欢迎 {{ userinfo.user }}</span>
         <span class="fenge">|</span>
-        <span class="exit">
+        <span class="exit" @click="signout">
           <i class="iconfont icon-tuichu"></i>
         </span>
       </div>
@@ -48,7 +48,6 @@ export default {
     }
   },
   methods: {
-
     //展示或折叠左侧导航区域
     changemenu() {
       this.$emit('changeMenu')
@@ -61,7 +60,34 @@ export default {
       } else if (command === 'myen') {
         this.internationalization = 'English'
       }
-    }
+    },
+    //退出登录
+    ...mapState('Login', ['deleteUser']),
+    ...mapState('Menu', ['deleteMenuList']),
+    signout() {
+      this.$confirm('此操作将退出登录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        //清空储存的菜单数据和登录信息
+        localStorage.removeItem('Goods')
+        this.deleteUser()
+        this.deleteMenuList()
+        this.$router.replace('/login')
+        this.$message({
+          type: 'success',
+          message: '已退出'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        });
+      });
+
+
+    },
   },
   computed: {
     //获取用户名

@@ -4,6 +4,7 @@
    dyMenuList 后端路由
 
 */
+
 export function rulesMenu(menu, dyMenuList) {
     //前端[{1,2,3},{2,3,4},{5,6}]  后端[{1,2},{3,4}]
     //筛选出符合后端条件的路由
@@ -25,6 +26,7 @@ export function rulesMenu(menu, dyMenuList) {
             }
         })
     })
+
     return menulist
 
 }

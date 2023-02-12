@@ -1,24 +1,33 @@
 <template>
-  <!-- 
-    el-menu 下拉菜单
-      background-color 背景颜色
-      text-color       文字颜色
-      active-text-color高亮文字颜色
-      router           启动路由模式
-      collapse         是否水平折叠菜单（仅在mode为vertival时可用） boolean -false
-    el-submenu  下拉导航内容
-       index="1"       导航标识 路由路径
-    el-menu-item-group 分组 
-    el-menu-item       导航的每一项内容
+  <div>
+    <!-- 
+   导航信息
+   [{home},{goods:,childen:[{},{},{}]},{order:,childen:[{},{},{}]}]
+   1.遍历获取导航的路由信息
+   2.渲染的时候要判断当前的路径是否有子元素
+   有children 长度大于0
+   没有children 只有以及
+     -->
+    <template v-for="(item, index) in menulist">
+      <el-submenu :index="item.name" :key="index" v-if="item.children && item.children.length > 0">
+        <template slot="title">
+          <i class="el-icon-location"></i>
+          <span slot="title">{{ item.meta.title }}</span>
+        </template>
+        <!--  
+          渲染二级导航，不需要循环遍历
+          注意 递归组件
+        -->
+        <el-menu-item-group>
+          <menulist :menulist="item.children"></menulist>
+        </el-menu-item-group>
+      </el-submenu>
 
-   -->
-  <el-menu :default-active="$route.name" class="el-menu-vertical-demo" background-color="#112f50" text-color="#fff"
-    active-text-color="#ffd04b" :collapse="isCollapse">
-    <el-menu-item>
-      <span>Ego后台管理系统</span>
-    </el-menu-item>
-    <Menuitem :menulist="dyMenuList">
-    </Menuitem>
+      <el-menu-item :index="item.name" :key="index" @click="tiao(item.name)" v-show="!item.meta.isShow" v-else>
+        <i class="el-icon-menu"></i>
+        <span slot="title">{{ item.meta.title }}</span>
+      </el-menu-item>
+    </template>
     <!-- <el-menu-item index="/">
       <i class="el-icon-menu"></i>
       <span slot="title">系统首页</span>
@@ -64,53 +73,26 @@
         <el-menu-item index="/management/department">部门管理</el-menu-item>
       </el-menu-item-group>
     </el-submenu> -->
-  </el-menu>
-
+  </div>
 </template>
 
 <script>
-import Menuitem from './Menuitem.vue'
-import { mapState } from 'vuex';
 export default {
-  props: ['isCollapse'],
-  data() {
-    return {
-      //动态渲染菜单
-      menu: []
-    }
+  name: 'menulist',
+  props: ['menulist'],
+  mounted() {
+    console.log('接收--------------------', this.menulist);
   },
   methods: {
-    // activeMenu() {
-    //   let route = this.$route;
-    //   console.log(route);
-    //   if (route.meta) {
-    //     return route.meta.activeMenu
-    //   }
-    //   return route.path
-    // }
-  },
-  computed: {
-    ...mapState('Menu', ['dyMenuList'])
-  },
-  mounted() {
-    console.log('dy --------------------', this.dyMenuList);
-  },
-  components: {
-    Menuitem
+    tiao(val) {
+      this.$router.push({ name: val })
+    }
   }
-};
+}
+
 </script>
 
 <style lang='less' scoped>
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
-  min-height: 400px;
-}
-
-.el-menu {
-  border: none;
-}
-
 .el-menu .is-active {
   background-color: #1e78df !important;
   color: #fff !important;

@@ -4,8 +4,8 @@ const app = express()
 //post 请求表单数据
 app.use(express.urlencoded({ extended: true }))
 //资源共享---只有打包的时候再去共享资源 研发不共享
-// const cors = require('cors')
-// app.use(cors())
+const cors = require('cors')
+app.use(cors())
 
 //静态文件托管 ----  访问：http:localhost:8989/图片.jpg
 app.use(express.static('upload'))
