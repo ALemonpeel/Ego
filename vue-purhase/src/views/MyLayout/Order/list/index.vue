@@ -133,7 +133,7 @@ export default {
       let arr = [...this.tableData]
       arr.forEach(ele => {
         ele.yudingTime = dayjs(ele.yudingTime).format('YYYY-MM-DD HH:mm:ss')
-        ele.huizongStatus = ele.huizongStatus == 1 ? '未汇总' : "已汇总"
+        ele.huizongStatus = ele.huizongStatus == '已汇总' ? 1 : 2
       })
       this.DetailsForm = arr
     },

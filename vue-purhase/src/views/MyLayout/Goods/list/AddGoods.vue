@@ -122,6 +122,7 @@ export default {
       let images = JSON.parse(this.goodsData.image)
       this.GoodsForm.image = images//获取vuex里面的数组 转成数组的语法
       console.log(images);
+
       let arr = []
       images.forEach(ele => {
         let obj = {}
@@ -129,6 +130,7 @@ export default {
         arr.push(obj)
       });
       this.fileList = arr
+      console.log(this.fileList);
       //获取富文本编辑数据------------------------------------
       this.eaitor = this.goodsData.descs
 
