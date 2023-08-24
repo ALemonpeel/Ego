@@ -21,12 +21,26 @@ const vipPermission = require("./login/data/vip_permission.json");
 //登录-分权限 1. 超级管理员 admin   2. 其他账号 vip账号 3.
 router.post("/login", (req, res) => {
   const username = req.body.user;
+  console.log(username);
   const pwd = req.body.pwd;
-  if (username === 'admin') {//超级管理员
-    res.send(adminLogin)
-  } else {
-    res.send(vipLogin)//普通VIP用户 
-  }
+  const sqlLen = `select * from userinfo where username = "${username}"`;
+  console.log(sqlLen);
+  sqlFn(sqlLen, null, (data) => {
+    console.log(typeof data[0].password);
+    if (data !== '') {
+      if (username === 'admin' && pwd == data[0].password) {//超级管理员
+        res.send(adminLogin)
+      } else if (pwd == data[0].password) {
+        res.send(vipLogin)//普通VIP用户 
+      } else {
+        res.send({
+          status: 400,
+          msg: "用户名或密码错误"
+        })
+      }
+    }
+  })
+
 })
 
 //用户权限数据接口

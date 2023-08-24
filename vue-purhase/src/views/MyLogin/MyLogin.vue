@@ -21,6 +21,12 @@
         </el-form-item>
       </el-form>
     </div>
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      <span>账号或密码错误请重新输入</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
  
@@ -43,10 +49,11 @@ export default {
         ],
         password: [
           { required: true, message: "密码不能为空", trigger: "blur" },
-          { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }
+          { min: 0, max: 12, message: "长度在 0 到 12 个字符", trigger: "blur" }
         ]
 
-      }
+      },
+      dialogVisible: false,
     }
   },
   methods: {
@@ -59,7 +66,6 @@ export default {
     async Login(user, pwd) {
       if (this.loginForm.username != '' && this.loginForm.password != '') {
         let res = await this.$api.Login({ user, pwd })
-        console.log(res.data);
         if (res.data.status === 200) {
           let obj = {
             user,
@@ -70,13 +76,17 @@ export default {
           this.setUser(obj);
           //跳转网页
           this.$router.push('/')
+        } else if (res.data.status === 400) {
+          this.dialogVisible = true
         }
-      } else {
-        this.$message({
-          message: '请输入用户名和密码',
-          type: 'warning'
-        });
       }
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done();
+        })
+        .catch(_ => { });
     }
   },
 }
