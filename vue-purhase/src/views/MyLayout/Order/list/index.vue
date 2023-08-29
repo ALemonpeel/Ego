@@ -32,7 +32,7 @@
     </div>
     <!-- 表格 -->
     <div class="table">
-      <el-table :data="tableData" border style="width: 100%" @selection-change="selectChange">
+      <el-table :data="tableData" style="width: 100%" @selection-change="selectChange">
 
         <el-table-column type="selection" width="55" :selectable="selectFun">
         </el-table-column>
@@ -130,10 +130,12 @@ export default {
   methods: {
     dayjs,
     download() {
-      let arr = [...this.tableData]
+      let arr = _.cloneDeep(this.tableData)
+      console.log(arr);
+      console.log(this.tableData);
       arr.forEach(ele => {
         ele.yudingTime = dayjs(ele.yudingTime).format('YYYY-MM-DD HH:mm:ss')
-        ele.huizongStatus = ele.huizongStatus == '已汇总' ? 1 : 2
+        ele.huizongStatus = ele.huizongStatus == 2 ? '已汇总' : '未汇总'
       })
       this.DetailsForm = arr
     },

@@ -65,6 +65,7 @@ export default {
     ...mapState('Login', ['deleteUser']),
     ...mapState('Menu', ['deleteMenuList']),
     signout() {
+      console.log();
       this.$confirm('此操作将退出登录, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -74,7 +75,8 @@ export default {
         localStorage.removeItem('Goods')
         this.deleteUser()
         this.deleteMenuList()
-        this.$router.replace('/login')
+        // window.location.href = 'https://58kr325790.zicp.fun/';
+        this.$router.replace('/login');
         this.$message({
           type: 'success',
           message: '已退出'

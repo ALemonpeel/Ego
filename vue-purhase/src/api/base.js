@@ -34,6 +34,6 @@ const base = {
 export const host = 'http://127.0.0.1:9898/'
 
 //导出图片地址
-export const upload = '/api/upload'
+export const upload = 'http://127.0.0.1:9898/upload'
 
 export default base

@@ -11,7 +11,8 @@
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
-          <el-input v-model="loginForm.password" :show-password="true" prefix-icon="el-icon-lock"></el-input>
+          <el-input v-model="loginForm.password" :show-password="true" prefix-icon="el-icon-lock"
+            @keyup.13.native="Login(loginForm.username, loginForm.password)"></el-input>
         </el-form-item>
 
         <!-- 按钮 -->
@@ -87,8 +88,23 @@ export default {
           done();
         })
         .catch(_ => { });
+    },
+    keyup(e) {
+      if (e.keyCode == 13) {
+        if (this.loginForm.username != '' && this.loginForm.password != '') {
+          this.Login(this.loginForm.username, this.loginForm.password);
+        } else {
+          this.dialogVisible = true
+
+        }
+      }
+
+    },
+    mounted() {
+      window.addEventListener('keyup', this.keyup)
     }
-  },
+
+  }
 }
 </script>
 <style lang="less" scoped>
